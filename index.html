@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>spore choir</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tuna@1.0.9/tuna.js"></script>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -130,6 +131,33 @@
                     <button id="triggerBtn">trigger</button>
                     <button id="randomSeed">🎲 random seed</button>
                 </div>
+            </div>
+            
+            <!-- Effects Chain -->
+            <div class="panel">
+                <div class="panel-title">effects chain</div>
+                
+                <div class="button-group" style="margin-bottom: 15px;">
+                    <select id="addEffect">
+                        <option value="">+ add effect</option>
+                        <option value="overdrive">Overdrive</option>
+                        <option value="filter">Filter</option>
+                        <option value="cabinet">Cabinet</option>
+                        <option value="delay">Delay</option>
+                        <option value="convolver">Convolver</option>
+                        <option value="compressor">Compressor</option>
+                        <option value="wahwah">Wah-Wah</option>
+                        <option value="tremolo">Tremolo</option>
+                        <option value="phaser">Phaser</option>
+                        <option value="chorus">Chorus</option>
+                        <option value="bitcrusher">Bitcrusher</option>
+                        <option value="moog">Moog Filter</option>
+                        <option value="pingpongdelay">Ping-Pong Delay</option>
+                    </select>
+                    <button id="clearEffects">clear all</button>
+                </div>
+                
+                <div id="effectsList" class="effects-list"></div>
             </div>
             
             <!-- Sequencer Controls -->
