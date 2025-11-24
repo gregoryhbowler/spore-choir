@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>spore choir</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>spore choir</h1>
+        </header>
+        
+        <div class="main-grid">
+            <!-- Seed Visualization Panel -->
+            <div class="panel seed-panel">
+                <div class="seed-value" id="seedDisplay">seed: 3079</div>
+                <div class="spore-grid" id="sporeGrid"></div>
+            </div>
+            
+            <!-- Core Controls -->
+            <div class="panel">
+                <div class="panel-title">core parameters</div>
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>amplitude</span>
+                            <span class="control-value" id="ampVal">-20</span>
+                        </div>
+                        <input type="range" id="amp" min="-90" max="0" value="-20" step="0.1">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>note</span>
+                            <span class="control-value" id="noteVal">52</span>
+                        </div>
+                        <input type="range" id="note" min="0" max="127" value="52" step="1">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>attack</span>
+                            <span class="control-value" id="attackVal">0.02</span>
+                        </div>
+                        <input type="range" id="attack" min="0.01" max="0.8" value="0.02" step="0.01">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>decay</span>
+                            <span class="control-value" id="decayVal">0.15</span>
+                        </div>
+                        <input type="range" id="decay" min="0" max="1" value="0.15" step="0.01">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>x0 (meta)</span>
+                            <span class="control-value" id="x0Val">0.5</span>
+                        </div>
+                        <input type="range" id="x0" min="0" max="1" value="0.5" step="0.01">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>x1 (meta)</span>
+                            <span class="control-value" id="x1Val">0.5</span>
+                        </div>
+                        <input type="range" id="x1" min="0" max="1" value="0.5" step="0.01">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>lazy</span>
+                            <span class="control-value" id="lazyVal">0.1</span>
+                        </div>
+                        <input type="range" id="lazy" min="0.01" max="1" value="0.1" step="0.01">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>grit</span>
+                            <span class="control-value" id="gritVal">0.8</span>
+                        </div>
+                        <input type="range" id="grit" min="0" max="1" value="0.8" step="0.01">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <label>
+                        <input type="checkbox" id="aware">
+                        <span>aware mode</span>
+                    </label>
+                </div>
+                
+                <div id="scaleControl" style="margin-top: 15px; display: none;">
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>scale / mode</span>
+                        </div>
+                        <select id="scale">
+                            <option value="major">major</option>
+                            <option value="minor">minor</option>
+                            <option value="dorian">dorian</option>
+                            <option value="phrygian">phrygian</option>
+                            <option value="lydian">lydian</option>
+                            <option value="mixolydian">mixolydian</option>
+                            <option value="locrian">locrian</option>
+                            <option value="harmonicMinor">harmonic minor</option>
+                            <option value="melodicMinor">melodic minor</option>
+                            <option value="pentatonicMajor">pentatonic major</option>
+                            <option value="pentatonicMinor">pentatonic minor</option>
+                            <option value="blues">blues</option>
+                            <option value="wholeTone">whole tone</option>
+                            <option value="chromatic">chromatic</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="seed-controls" style="margin-top: 20px;">
+                    <button id="seedDec">◄</button>
+                    <input type="number" id="seed" min="0" max="16383" value="3079">
+                    <button id="seedInc">►</button>
+                </div>
+                
+                <div class="button-group" style="margin-top: 15px;">
+                    <button id="triggerBtn">trigger</button>
+                    <button id="randomSeed">🎲 random seed</button>
+                </div>
+            </div>
+            
+            <!-- Sequencer Controls -->
+            <div class="panel">
+                <div class="panel-title">sequencer</div>
+                <div class="controls-grid">
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>steps</span>
+                            <span class="control-value" id="seqStepsVal">8</span>
+                        </div>
+                        <input type="range" id="seqSteps" min="1" max="24" value="8" step="1">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>tempo (16ths)</span>
+                            <span class="control-value" id="seqFreqVal">120</span>
+                        </div>
+                        <input type="range" id="seqFreq" min="30" max="300" value="120" step="1">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>fill</span>
+                            <span class="control-value" id="seqFillVal">1.0</span>
+                        </div>
+                        <input type="range" id="seqFill" min="0" max="1" value="1" step="0.01">
+                    </div>
+                    
+                    <div class="control-group">
+                        <div class="control-label">
+                            <span>shift</span>
+                            <span class="control-value" id="seqShiftVal">0.0</span>
+                        </div>
+                        <input type="range" id="seqShift" min="0" max="1" value="0" step="0.01">
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <label>
+                        <input type="checkbox" id="trigOnSeed" checked>
+                        <span>trigger on seed change</span>
+                    </label>
+                </div>
+                
+                <div class="button-group" style="margin-top: 15px;">
+                    <button id="startBtn">start sequencer</button>
+                    <button id="stopBtn">stop</button>
+                </div>
+            </div>
+            
+            <!-- Pattern Sequencer -->
+            <div class="panel">
+                <div class="panel-title">pattern sequencer</div>
+                
+                <div class="button-group">
+                    <button id="patternSave">save to cell</button>
+                    <button id="patternCopy">copy</button>
+                    <button id="patternPaste" disabled>paste</button>
+                    <button id="patternClear">clear cell</button>
+                    <button id="patternClearAll">clear all</button>
+                </div>
+                
+                <div class="button-group" style="margin-top: 15px;">
+                    <button id="patternPlay">▶ play pattern</button>
+                    <button id="patternStop">■ stop</button>
+                </div>
+                
+                <div class="mode-buttons">
+                    <span style="color: #666; font-size: 0.75em; text-transform: lowercase; margin-right: 0.5rem;">mode:</span>
+                    <button class="mode-btn active" data-mode="forward">forward</button>
+                    <button class="mode-btn" data-mode="backward">backward</button>
+                    <button class="mode-btn" data-mode="pingpong">ping-pong</button>
+                    <button class="mode-btn" data-mode="random">random</button>
+                </div>
+                
+                <div class="pattern-grid" id="patternCells"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+</html>
